@@ -8,24 +8,24 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
-@Table(name = "suppliers")
+@Table(name = "user_cart")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Supplier {
+public class UserCart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long supplierId;
+    private Long userCartId;
 
-    private String companyName;
+    private Long quantity;
 
-    private String email;
+    @ManyToMany(mappedBy = "userCart")
+    private List<Product> productName;
 
-    private Integer pinCode;
+    @OneToOne(mappedBy = "userCart" )
+    private User user;
 
-    @OneToMany(mappedBy = "supplier")
-    private List<Product> products;
 
 
 }

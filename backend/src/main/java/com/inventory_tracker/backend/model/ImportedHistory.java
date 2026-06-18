@@ -5,30 +5,31 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
-@Table(name = "products")
+@Table(name = "imported_history")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product {
+public class ImportedHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long productId;
+    private Long importedHistoryId;
 
-    private String productName;
+    private Long quantity;
 
-    @ManyToMany
-    @JoinTable(name = "product_userCart",
-    joinColumns = @JoinColumn(name = "product_id"),
-    inverseJoinColumns = @JoinColumn(name = "userCart_id")
-    )
-    private List<UserCart> userCart;
+    private LocalDate date;
+
+    private LocalTime time;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
-
 }

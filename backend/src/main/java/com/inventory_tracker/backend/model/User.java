@@ -5,27 +5,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
-@Table(name = "suppliers")
+@Table(name = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Supplier {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long supplierId;
+    private Long userId;
 
-    private String companyName;
-
-    private String email;
-
-    private Integer pinCode;
-
-    @OneToMany(mappedBy = "supplier")
-    private List<Product> products;
-
+    @OneToOne(cascade = {CascadeType.MERGE ,CascadeType.PERSIST , CascadeType.REMOVE })
+    @JoinColumn( name = "user_cart_id")
+    private UserCart userCart;
 
 }
