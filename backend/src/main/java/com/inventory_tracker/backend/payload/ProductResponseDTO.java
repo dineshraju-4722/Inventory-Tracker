@@ -8,11 +8,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductDTO {
+public class ProductResponseDTO {
 
     private Long productId;
 
     private String productName;
+
+    private CategoryDTO category;
 
 
     private SupplierDTO supplier;
