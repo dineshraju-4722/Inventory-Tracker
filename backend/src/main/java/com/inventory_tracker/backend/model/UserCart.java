@@ -20,10 +20,12 @@ public class UserCart {
 
     private Long quantity;
 
-    @ManyToMany(mappedBy = "userCart")
-    private List<Product> productName;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 
-    @OneToOne(mappedBy = "userCart" )
+    @ManyToOne
+    @JoinColumn( name = "user_id")
     private User user;
 
 

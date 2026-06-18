@@ -16,8 +16,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @OneToOne(cascade = {CascadeType.MERGE ,CascadeType.PERSIST , CascadeType.REMOVE })
-    @JoinColumn( name = "user_cart_id")
-    private UserCart userCart;
+    private String userName;
+
+    private String email;
+
+    private String password;
+
+//    @OneToOne(cascade = {CascadeType.MERGE ,CascadeType.PERSIST , CascadeType.REMOVE })
+//    private UserCart userCart;
 
 }

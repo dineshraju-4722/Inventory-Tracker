@@ -20,11 +20,7 @@ public class Product {
 
     private String productName;
 
-    @ManyToMany
-    @JoinTable(name = "product_userCart",
-    joinColumns = @JoinColumn(name = "product_id"),
-    inverseJoinColumns = @JoinColumn(name = "userCart_id")
-    )
+    @OneToMany(mappedBy = "product")
     private List<UserCart> userCart;
 
     @ManyToOne
