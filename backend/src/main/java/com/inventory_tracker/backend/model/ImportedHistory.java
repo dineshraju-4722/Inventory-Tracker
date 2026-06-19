@@ -30,6 +30,12 @@ public class ImportedHistory {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "supplier_id")
-    private Supplier supplier;
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    @PrePersist
+    public void persist(){
+        this.setDate(LocalDate.now());
+        this.setTime(LocalTime.now());
+    }
 }
