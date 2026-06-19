@@ -10,5 +10,5 @@ public interface UserCartService {
 
     List<UserCartResponseDTO> getUsersCart();
 
-    List<UserCartResponseDTO> getUserCartById(Long userId);
+    List<UserCartResponseDTO> getUserCart();
 }

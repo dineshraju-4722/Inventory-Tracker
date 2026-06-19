@@ -9,12 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserCartRequestDTO {
-    private Long userCartId;
 
     private Long quantity;
 
     private  Long productId;
-    private  Long userId;
 
 
 }

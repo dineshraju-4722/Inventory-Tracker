@@ -1,5 +1,6 @@
 package com.inventory_tracker.backend.service;
 
+import com.inventory_tracker.backend.exceptions.ResourceNotFoundException;
 import com.inventory_tracker.backend.model.Product;
 import com.inventory_tracker.backend.model.User;
 import com.inventory_tracker.backend.model.UserCart;
@@ -7,6 +8,7 @@ import com.inventory_tracker.backend.payload.*;
 import com.inventory_tracker.backend.repositories.ProductRepository;
 import com.inventory_tracker.backend.repositories.UserCartRepository;
 import com.inventory_tracker.backend.repositories.UserRepository;
+import com.inventory_tracker.backend.util.AuthUtil;
 import org.jspecify.annotations.NonNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -20,19 +22,21 @@ public class UserCartServiceImpl implements  UserCartService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final UserCartRepository userCartRepository;
+    private final AuthUtil authUtil;
 
-    public UserCartServiceImpl(ModelMapper modelMapper, ProductRepository productRepository, UserRepository userRepository, UserCartRepository userCartRepository) {
+    public UserCartServiceImpl(ModelMapper modelMapper, ProductRepository productRepository, UserRepository userRepository, UserCartRepository userCartRepository, AuthUtil authUtil) {
         this.modelMapper = modelMapper;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
         this.userCartRepository = userCartRepository;
+        this.authUtil = authUtil;
     }
 
     @Override
     public UserCartResponseDTO addUserCart(UserCartRequestDTO userCartRequestDTO) {
         UserCart userCart = modelMapper.map(userCartRequestDTO, UserCart.class);
-        Product product = productRepository.findById(userCartRequestDTO.getProductId()).orElse(null);
-        User user = userRepository.findById(userCartRequestDTO.getUserId()).orElse(null);
+        Product product = productRepository.findById(userCartRequestDTO.getProductId()).orElseThrow(()->new ResourceNotFoundException("PRODUCT","productId",userCartRequestDTO.getProductId()));
+        User user = authUtil.getLoggedInUser();
         userCart.setUser(user);
         userCart.setProduct(product);
         UserCart savedUserCart = userCartRepository.save(userCart);
@@ -48,7 +52,8 @@ public class UserCartServiceImpl implements  UserCartService {
     }
 
     @Override
-    public List<UserCartResponseDTO> getUserCartById(Long userId) {
+    public List<UserCartResponseDTO> getUserCart() {
+        Long userId = authUtil.getLoggedInUserId();
         List<UserCart> userCartProducts = userCartRepository.findByUser_UserId(userId);
         return userCartProducts.stream().map(this::getUserCartResponseDTO).toList();
     }

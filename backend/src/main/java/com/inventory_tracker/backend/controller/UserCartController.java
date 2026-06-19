@@ -29,9 +29,9 @@ public class UserCartController {
         return new ResponseEntity<>(userCartResponseDTO , HttpStatus.OK);
     }
 
-    @GetMapping("/usercart/{userId}")
-    public ResponseEntity<List<UserCartResponseDTO>> getUserCartById(@PathVariable Long userId){
-        List<UserCartResponseDTO> userCartResponseDTO = userCartService.getUserCartById(userId);
+    @GetMapping("/usercart")
+    public ResponseEntity<List<UserCartResponseDTO>> getUserCart(){
+        List<UserCartResponseDTO> userCartResponseDTO = userCartService.getUserCart();
         return new ResponseEntity<>(userCartResponseDTO , HttpStatus.OK);
     }
 
