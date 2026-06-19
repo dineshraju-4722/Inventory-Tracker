@@ -9,6 +9,7 @@ import com.inventory_tracker.backend.repositories.ProductRepository;
 import com.inventory_tracker.backend.repositories.UserCartRepository;
 import com.inventory_tracker.backend.repositories.UserRepository;
 import com.inventory_tracker.backend.util.AuthUtil;
+import jakarta.transaction.Transactional;
 import org.jspecify.annotations.NonNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -33,13 +34,18 @@ public class UserCartServiceImpl implements  UserCartService {
     }
 
     @Override
+    @Transactional
     public UserCartResponseDTO addUserCart(UserCartRequestDTO userCartRequestDTO) {
-        UserCart userCart = modelMapper.map(userCartRequestDTO, UserCart.class);
+        System.out.println("1");
+        UserCart userCart = new UserCart();
+        userCart.setQuantity(userCartRequestDTO.getQuantity());
         Product product = productRepository.findById(userCartRequestDTO.getProductId()).orElseThrow(()->new ResourceNotFoundException("PRODUCT","productId",userCartRequestDTO.getProductId()));
         User user = authUtil.getLoggedInUser();
+        System.out.println("3");
         userCart.setUser(user);
         userCart.setProduct(product);
         UserCart savedUserCart = userCartRepository.save(userCart);
+        System.out.println("5");
         return getUserCartResponseDTO(savedUserCart);
     }
 

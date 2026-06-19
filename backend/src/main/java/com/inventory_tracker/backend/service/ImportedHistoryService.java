@@ -9,4 +9,6 @@ public interface ImportedHistoryService {
     ImportedHistoryResponseDTO addImportedProduct(ImportedHistoryRequestDTO importedHistoryRequestDTO);
 
     List<ImportedHistoryResponseDTO> getAllImportedHistories();
+
+    ImportedHistoryResponseDTO updateImportedHistory(Long id, ImportedHistoryRequestDTO importedHistoryRequestDTO);
 }

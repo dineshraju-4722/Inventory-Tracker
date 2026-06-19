@@ -1,14 +1,8 @@
 package com.inventory_tracker.backend.service;
 
-import com.inventory_tracker.backend.model.ImportedHistory;
-import com.inventory_tracker.backend.model.Product;
-import com.inventory_tracker.backend.model.Supplier;
-import com.inventory_tracker.backend.model.User;
+import com.inventory_tracker.backend.model.*;
 import com.inventory_tracker.backend.payload.*;
-import com.inventory_tracker.backend.repositories.ImportedHistoryRepository;
-import com.inventory_tracker.backend.repositories.ProductRepository;
-import com.inventory_tracker.backend.repositories.SupplierRepository;
-import com.inventory_tracker.backend.repositories.UserRepository;
+import com.inventory_tracker.backend.repositories.*;
 import org.jspecify.annotations.NonNull;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
@@ -30,11 +24,17 @@ public class ImportedHistoryServiceImpl implements  ImportedHistoryService {
     private ProductRepository productRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private UserCartRepository userCartRepository;
 
     @Override
     public ImportedHistoryResponseDTO addImportedProduct(ImportedHistoryRequestDTO importedHistoryRequestDTO) {
         Product product = productRepository.findById(importedHistoryRequestDTO.getProductId()).orElse(null);
         User user = userRepository.findById(importedHistoryRequestDTO.getUserId()).orElse(null);
+//        UserCart userCart = userCartRepository.findByUserAndProduct(user, product);
+//        if(userCart == null ){
+//
+//        }
         ImportedHistory importedHistory = new ImportedHistory();
         importedHistory.setQuantity(importedHistoryRequestDTO.getQuantity());
         importedHistory.setProduct(product);
@@ -59,4 +59,21 @@ public class ImportedHistoryServiceImpl implements  ImportedHistoryService {
         List<ImportedHistory> importedHistoryList = importedHistoryRepository.findAll();
         return importedHistoryList.stream().map(this::getImportedHistoryResponseDTO).toList();
     }
+
+    @Override
+    public ImportedHistoryResponseDTO updateImportedHistory(Long id, ImportedHistoryRequestDTO importedHistoryRequestDTO) {
+        ImportedHistory importedHistory = importedHistoryRepository.findById(id).orElse(null);
+        if(importedHistory == null){
+            return null;
+        }
+        Product product = productRepository.findById(importedHistoryRequestDTO.getProductId()).orElse(null);
+        User user = userRepository.findById(importedHistoryRequestDTO.getUserId()).orElse(null);
+        importedHistory.setQuantity(importedHistoryRequestDTO.getQuantity());
+        importedHistory.setProduct(product);
+        importedHistory.setUser(user);
+        ImportedHistory saved = importedHistoryRepository.save(importedHistory);
+        return getImportedHistoryResponseDTO(saved);
+    }   
+
+
 }
