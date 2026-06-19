@@ -1,9 +1,15 @@
 package com.inventory_tracker.backend.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.*;
+import org.jspecify.annotations.Nullable;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -22,6 +28,21 @@ public class User {
 
     private String password;
 
+    @Getter
+    @Setter
+    @ManyToMany
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn( name = "role_id" )
+    )
+    private Set<Role> roles = new HashSet<>();
+
+    public User(@NotBlank @Size(min=3,max = 20) String username, @NotBlank @Email @Size(max=50) String email, @Nullable String encode) {
+    }
+
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE,CascadeType.REMOVE,CascadeType.PERSIST})
+    private List<ImportedHistory> importedHistories;
 //    @OneToOne(cascade = {CascadeType.MERGE ,CascadeType.PERSIST , CascadeType.REMOVE })
 //    private UserCart userCart;
 
