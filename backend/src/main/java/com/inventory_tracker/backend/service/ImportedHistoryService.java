@@ -10,5 +10,4 @@ public interface ImportedHistoryService {
 
     List<ImportedHistoryResponseDTO> getAllImportedHistories();
 
-    ImportedHistoryResponseDTO updateImportedHistory(Long id, ImportedHistoryRequestDTO importedHistoryRequestDTO);
-}
+   }

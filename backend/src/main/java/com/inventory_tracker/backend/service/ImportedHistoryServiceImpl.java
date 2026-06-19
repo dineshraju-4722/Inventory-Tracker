@@ -3,6 +3,8 @@ package com.inventory_tracker.backend.service;
 import com.inventory_tracker.backend.model.*;
 import com.inventory_tracker.backend.payload.*;
 import com.inventory_tracker.backend.repositories.*;
+import com.inventory_tracker.backend.util.AuthUtil;
+import jakarta.transaction.Transactional;
 import org.jspecify.annotations.NonNull;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
@@ -26,20 +28,31 @@ public class ImportedHistoryServiceImpl implements  ImportedHistoryService {
     private ModelMapper modelMapper;
     @Autowired
     private UserCartRepository userCartRepository;
+    @Autowired
+    private UserCartServiceImpl userCartServiceImpl;
+    @Autowired
+    private AuthUtil authUtil;
 
     @Override
+    @Transactional
     public ImportedHistoryResponseDTO addImportedProduct(ImportedHistoryRequestDTO importedHistoryRequestDTO) {
+
         Product product = productRepository.findById(importedHistoryRequestDTO.getProductId()).orElse(null);
         User user = userRepository.findById(importedHistoryRequestDTO.getUserId()).orElse(null);
-//        UserCart userCart = userCartRepository.findByUserAndProduct(user, product);
-//        if(userCart == null ){
-//
-//        }
+
         ImportedHistory importedHistory = new ImportedHistory();
         importedHistory.setQuantity(importedHistoryRequestDTO.getQuantity());
         importedHistory.setProduct(product);
         importedHistory.setUser(user);
         ImportedHistory saved = importedHistoryRepository.save(importedHistory);
+        UserCart userCart = userCartRepository.findByUserAndProduct(user, product);
+        if(userCart!=null){
+            userCart.setQuantity(userCart.getQuantity()+importedHistoryRequestDTO.getQuantity());
+            userCartRepository.save(userCart);
+        }
+        else {
+            userCartServiceImpl.addUserCart(new UserCartRequestDTO(importedHistoryRequestDTO.getQuantity(),importedHistoryRequestDTO.getProductId()));
+        }
         return getImportedHistoryResponseDTO(saved);
     }
     @NonNull
@@ -56,24 +69,12 @@ public class ImportedHistoryServiceImpl implements  ImportedHistoryService {
 
     @Override
     public List<ImportedHistoryResponseDTO> getAllImportedHistories() {
-        List<ImportedHistory> importedHistoryList = importedHistoryRepository.findAll();
+        User loggedInUser = authUtil.getLoggedInUser();
+        List<ImportedHistory> importedHistoryList = importedHistoryRepository.findAllByUser(loggedInUser);
         return importedHistoryList.stream().map(this::getImportedHistoryResponseDTO).toList();
     }
 
-    @Override
-    public ImportedHistoryResponseDTO updateImportedHistory(Long id, ImportedHistoryRequestDTO importedHistoryRequestDTO) {
-        ImportedHistory importedHistory = importedHistoryRepository.findById(id).orElse(null);
-        if(importedHistory == null){
-            return null;
-        }
-        Product product = productRepository.findById(importedHistoryRequestDTO.getProductId()).orElse(null);
-        User user = userRepository.findById(importedHistoryRequestDTO.getUserId()).orElse(null);
-        importedHistory.setQuantity(importedHistoryRequestDTO.getQuantity());
-        importedHistory.setProduct(product);
-        importedHistory.setUser(user);
-        ImportedHistory saved = importedHistoryRepository.save(importedHistory);
-        return getImportedHistoryResponseDTO(saved);
-    }   
+
 
 
 }

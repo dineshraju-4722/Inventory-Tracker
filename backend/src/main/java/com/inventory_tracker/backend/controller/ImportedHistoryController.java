@@ -31,13 +31,4 @@ public class ImportedHistoryController {
          List<ImportedHistoryResponseDTO> importedHistoryResponseDTOs = importedHistoryService.getAllImportedHistories();
          return new ResponseEntity<>(importedHistoryResponseDTOs,HttpStatus.OK);
     }
-
-    @PutMapping("/importedhistory/{id}")
-    public ResponseEntity<ImportedHistoryResponseDTO> updateImportedHistory(@PathVariable Long id,
-                                                                             @RequestBody ImportedHistoryRequestDTO importedHistoryRequestDTO){
-        ImportedHistoryResponseDTO importedHistoryResponseDTO = importedHistoryService.updateImportedHistory(id,importedHistoryRequestDTO);
-        return new ResponseEntity<>(importedHistoryResponseDTO,HttpStatus.OK);
-    }
-
-    
 }
