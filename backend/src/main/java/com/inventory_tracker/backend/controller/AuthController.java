@@ -110,7 +110,7 @@ public class AuthController {
                 switch(role){
                     case "admin" :
                         Role adminRole = roleRepository.findByRoleName(AppRole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error : Role doesnot found"));
+                                .orElseThrow(() -> new RuntimeException("Error : Role does not found"));
                         roles.add(adminRole);
                         break;
                     default:
@@ -123,7 +123,6 @@ public class AuthController {
         }
         user.setRoles(roles);
         userRepository.save(user);
-
         return ResponseEntity.ok
                 (new MessageResponse("User Registered Successfully"));
     }

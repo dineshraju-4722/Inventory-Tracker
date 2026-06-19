@@ -30,7 +30,7 @@ public class User {
 
     @Getter
     @Setter
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.MERGE,CascadeType.REMOVE,CascadeType.PERSIST})
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -38,7 +38,10 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
-    public User(@NotBlank @Size(min=3,max = 20) String username, @NotBlank @Email @Size(max=50) String email, @Nullable String encode) {
+    public User(String userName, String email, String password) {
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
     }
 
     @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE,CascadeType.REMOVE,CascadeType.PERSIST})

@@ -16,7 +16,7 @@ public class SupplierController {
     @Autowired
     private SupplierService supplierService;
 
-    @PostMapping("/supplier")
+    @PostMapping("/admin/supplier")
     public ResponseEntity<SupplierDTO> addSupplier(@RequestBody SupplierDTO supplierDTO){
         SupplierDTO responseSupplierDTO = supplierService.addSupplier(supplierDTO );
         return new ResponseEntity<>(responseSupplierDTO, HttpStatus.CREATED);

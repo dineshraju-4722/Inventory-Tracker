@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @NoArgsConstructor
 @Data
@@ -19,6 +21,9 @@ public class Role {
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private AppRole roleName;
+
+    @ManyToMany(mappedBy = "roles",cascade = {CascadeType.MERGE,CascadeType.REMOVE,CascadeType.PERSIST})
+    private List<User> users;
 
     public Role(AppRole roleName) {
         this.roleName = roleName;

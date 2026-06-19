@@ -17,7 +17,7 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @PostMapping("/product")
+    @PostMapping("/admin/product")
     public ResponseEntity<ProductResponseDTO> addProduct(@RequestBody ProductRequestDTO productRequestDTO){
         ProductResponseDTO responseProductDTO = productService.addProduct(productRequestDTO);
         return  new ResponseEntity<>(responseProductDTO, HttpStatus.CREATED);

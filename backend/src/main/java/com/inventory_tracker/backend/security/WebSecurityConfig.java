@@ -65,35 +65,36 @@ public class WebSecurityConfig {
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/auth/**").permitAll()
-                                .requestMatchers("/api/public/**").permitAll()
+                                .requestMatchers("/api/user/**").hasRole("USER")
                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/api/public/**").permitAll()
                                 .requestMatchers("/images/**").permitAll()
                                 .anyRequest().authenticated()
-                        )
+                )
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(authenticaionJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
-//    @Bean
-//    public CommandLineRunner initData(RoleRepository roleRepository, UserRepository userRepository,PasswordEncoder passwordEncoder){
-//        return args -> {
-//            Role userRole = roleRepository.findByRoleName(AppRole.ROLE_USER)
-//                    .orElseGet(() -> {
-//                        Role newUserRole = new Role(AppRole.ROLE_USER);
-//                        return roleRepository.save(newUserRole);
-//                    });
-//            Role adminRole = roleRepository.findByRoleName(AppRole.ROLE_ADMIN)
-//                    .orElseGet( () -> {
-//                        Role newAdminRole = new Role(AppRole.ROLE_ADMIN);
-//                        return roleRepository.save(newAdminRole);
-//                    });
-//
-//
-//
+    @Bean
+    public CommandLineRunner initData(RoleRepository roleRepository, UserRepository userRepository,PasswordEncoder passwordEncoder){
+        return args -> {
+            Role userRole = roleRepository.findByRoleName(AppRole.ROLE_USER)
+                    .orElseGet(() -> {
+                        Role newUserRole = new Role(AppRole.ROLE_USER);
+                        return roleRepository.save(newUserRole);
+                    });
+            Role adminRole = roleRepository.findByRoleName(AppRole.ROLE_ADMIN)
+                    .orElseGet( () -> {
+                        Role newAdminRole = new Role(AppRole.ROLE_ADMIN);
+                        return roleRepository.save(newAdminRole);
+                    });
+
+
+
 //            Set<Role> userRoles = Set.of(userRole);
 //            Set<Role> sellerRoles = Set.of(sellerRole);
-//            Set<Role> adminRoles = Set.of(sellerRole,userRole,adminRole);
+//            Set<Role> adminRoles = Set.of(userRole,adminRole);
 //
 //            if(!userRepository.existsByUserName("user")){
 //                User user = new User("user", "user@gmail.com", passwordEncoder.encode("user"));
@@ -120,7 +121,7 @@ public class WebSecurityConfig {
 //                seller.setRoles(sellerRoles);
 //                userRepository.save(seller);
 //            });
-//
-//        };
-//    }
+
+        };
+    }
 }
