@@ -1,0 +1,43 @@
+.supplier-section {
+  margin: 20px 0;
+}
+
+.supplier-section h4 {
+  margin-bottom: 12px;
+  color: #333;
+  font-weight: 600;
+}
+
+.supplier-card {
+  background-color: #fafafa;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+}
+
+.supplier-card p {
+  margin: 8px 0;
+  color: #666;
+}
+
+.supplier-card strong {
+  color: #333;
+}
+
+.no-supplier {
+  color: #999;
+  font-style: italic;
+}
+
+.product-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.product-option strong {
+  color: #667eea;
+}
+
+.ant-modal {
+  border-radius: 12px;
+}
